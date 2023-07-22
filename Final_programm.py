@@ -5,13 +5,13 @@ import logging
 
 import requests
 
-# Настройка логирования
+# Setting up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
 def get_friends(token, user_id):
-    # Функция для получения списка друзей пользователя из VK API
+    # Function for getting a list of user's friends from VK API
     url = f'https://api.vk.com/method/friends.get'
     params = {
         'access_token': token,
@@ -25,20 +25,21 @@ def get_friends(token, user_id):
     data = response.json()
 
     def order_list_of_dicts(list_of_dicts, order_keys):
-        # Вспомогательная функция для обработки данных о друзьях и сортировки по имени
+        # Auxiliary function for processing data about friends and sorting by name
         sex_mapping = {1: "женщина", 2: "мужчина"}
         ordered_list = []
         for data_dict in list_of_dicts:
             data_dict["bdate"] = data_dict["bdate"].replace(".", "-") if "bdate" in data_dict else None
-            data_dict["city"] = data_dict.get("city", {}).get("title") if "city" in data_dict else None
-            data_dict["country"] = data_dict.get("country", {}).get("title") if "country" in data_dict else None
-            data_dict["sex"] = sex_mapping.get(data_dict.get("sex"), "неизвестно") if "sex" in data_dict else None
+            data_dict["city"] = data_dict.get("city", {}).get("title") if "city" in data_dict else None # Take only the necessary information
+            data_dict["country"] = data_dict.get("country", {}).get("title") if "country" in data_dict else None 
+            data_dict["sex"] = sex_mapping.get(data_dict.get("sex"), "неизвестно") if "sex" in data_dict else None  
+            # Vk transmits the gender values as 1 and 2, so you need to replace
 
             ordered_dict = {key: data_dict[key] for key in order_keys if key in data_dict}
             ordered_list.append(ordered_dict)
         return ordered_list
 
-    order_keys = ["first_name", "last_name", "country", "city", "bdate", "sex"]
+    order_keys = ["first_name", "last_name", "country", "city", "bdate", "sex"] # to leave only the necessary information
 
     ordered_list_of_dicts = order_list_of_dicts(data['response']['items'], order_keys)
     friends_list = [json.dumps(ordered_dict, ensure_ascii=False, indent=2) for ordered_dict in ordered_list_of_dicts]
@@ -52,17 +53,17 @@ def get_friends(token, user_id):
 
 
 def write_friends_to_file(friends_list_data, output_format, output_file):
-    # Функция для записи данных о друзьях в файлы разных форматов
+    # Function for recording data about friends in files of different formats
 
     # Преобразовываем строки в словари
     data_dicts = [json.loads(data_str) for data_str in friends_list_data]
 
-    # Какие параметры будут в файле
+    # What parameters will be in the file
     parameters = ['First Name', 'Last Name', 'Country', 'City', 'Birth Date', 'Sex']
 
     try:
         if output_format == 'csv':
-            # Записываем данные в формат CSV
+            # Writing data to CSV format
             with open(f'{output_file}.csv', 'w+', newline='', encoding='utf-8-sig') as output_file:
                 csv_writer = csv.writer(output_file)
                 csv_writer.writerow(parameters)
@@ -76,7 +77,7 @@ def write_friends_to_file(friends_list_data, output_format, output_file):
                         data_dict.get('sex')
                     ])
         if output_format == 'tsv':
-            # Записываем данные в формат TSV
+            # Write data to TSV format
             with open(f'{output_file}.tsv', 'w+', newline='', encoding='utf-8-sig') as output_file:
                 tsv_writer = csv.writer(output_file, delimiter='\t')
                 tsv_writer.writerow(parameters)
@@ -92,7 +93,7 @@ def write_friends_to_file(friends_list_data, output_format, output_file):
 
         if output_format == 'json':
             data_dicts = [json.loads(data_str) for data_str in friends_list_data]
-            # Записываем данные в файл JSON
+            # Write data to JSON format
             with open(f'{output_file}.json', 'w', encoding='utf-8-sig') as output_file:
                 json.dump(data_dicts, output_file, ensure_ascii=False, indent=4)
 
@@ -104,19 +105,19 @@ def write_friends_to_file(friends_list_data, output_format, output_file):
 
 
 def read_token_from_file(file_path):
-    # Функция для чтения токена из файла
+    # Function for reading a token from a file
     with open(file_path, "r", encoding="utf-8") as file:
         token = file.read().strip()
     return token
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Создание отчета о друзьях из VKонтакте.")
-    parser.add_argument("token_file", help="Авторизационный токен VK API")
-    parser.add_argument("user_id", help="ID пользователя VK, для которого генерируем отчет")
+    parser = argparse.ArgumentParser(description="Creating a report about friends from VKontakte.")
+    parser.add_argument("token_file", help="VK API Authorization Token")
+    parser.add_argument("user_id", help="ID of the VK user for whom we are generating the report")
     parser.add_argument("--format", choices=["csv", "tsv", "json"], default="csv",
-                        help="Формат выходного файла (по умолчанию - CSV)")
-    parser.add_argument("--output", default="report", help="Путь к выходному файлу (по умолчанию - report)")
+                        help="Output file format (CSV by default)")
+    parser.add_argument("--output", default="report", help="The path to the output file (default is report)")
 
     args = parser.parse_args()
     token = read_token_from_file(args.token_file)
@@ -142,9 +143,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Внутренние тесты:
-# - Тестирование функции get_friends с корректными данными токена и ID пользователя.
-# - Тестирование функции get_friends с некорректными данными токена и/или ID пользователя (например, пустые значения).
-# - Тестирование функции write_friends_to_file с разными форматами вывода (csv, tsv, json) и проверка создания файлов.
-# - Тестирование функции write_friends_to_file с пустыми данными о друзьях (friends_list_data) и проверка обработки такого случая.
-# - Тестирование функции read_token_from_file с корректным и некорректным путем к файлу токена.
