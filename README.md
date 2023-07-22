@@ -3,7 +3,7 @@ A program that receives data about your friends such as: "First name, last name,
 
 To get started, we will need to get an access token, and the ID of the client for whom we are making a report, to do this, click on this link
 
-https://oauth.vk.com/authorize?client_id=51708572&display=page&redirect_uri=https://oauth.vk.com//blank.html&scope=offline,friends&response_type=token&v= 5.131
+https://oauth.vk.com/authorize?client_id=51708572&display=page&redirect_uri=https://oauth.vk.com//blank.html&scope=offline,friends&response_type=token&v=5.131
 
 after clicking on the link, you are asked to log in to your account
 ![Снимок экрана 2023-07-23 013938](https://github.com/Evafag02/get_friends_vk_api/assets/82770251/398c01ad-6114-4bb1-8414-9709451f2af4)
@@ -22,5 +22,7 @@ after that, we save the token to a file token.txt:
 
 next, open the command line (in windows 10, this is done by pressing win + r, and then in the window that opens, we enter cmd and press enter)
 also, to work, we will need to download the requests library, this is done simply by entering the command line: 'pip install requests'
-then open our file in the command line: 'python <Path to file> <Path to token> <user_id> /optional/ --format (csv, tsv, json | default=cvs) --output (file name | default = 'report')
+
+then open our file in the command line: "python <Path to file> <Path to token> <user_id> /optional/ --format (csv, tsv, json | default=cvs) --output (file name | default = 'report')"
+
 if everything works correctly, you will get a message that everything has worked successfully
