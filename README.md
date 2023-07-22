@@ -23,6 +23,6 @@ after that, we save the token to a file token.txt:
 next, open the command line (in windows 10, this is done by pressing win + r, and then in the window that opens, we enter cmd and press enter)
 also, to work, we will need to download the requests library, this is done simply by entering the command line: 'pip install requests'
 
-then open our file in the command line: "python <Path to file> <Path to token> <user_id> /optional/ --format (csv, tsv, json | default=cvs) --output (file name | default = 'report')"
+then open our file in the command line: "python <path_to_file> <path_to_token> <user_id> /optional/ --format (csv, tsv, json | default=cvs) --output (file name | default = 'report')"
 
 if everything works correctly, you will get a message that everything has worked successfully
