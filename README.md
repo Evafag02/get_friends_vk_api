@@ -1,4 +1,4 @@
-![image](https://github.com/Evafag02/get_friends_vk_api/assets/82770251/6fd86fa2-ce0b-42bc-80cc-7445384a97a3)# get_friends_vk_api
+# get_friends_vk_api
 A program that receives data about your friends such as: "First name, last name, country, city, birthday, gender" and saves them to such file formats as: "json, csv, tsv"
 
 To get started, we will need to get an access token, and the ID of the client for whom we are making a report, to do this, click on this link
