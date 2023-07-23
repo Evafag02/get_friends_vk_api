@@ -1,4 +1,4 @@
-if you want to open csv in excel, specify a comma separator
+if you want to open a csv file in Excel, specify it with a "comma" separator
 
 ![Снимок экрана 2023-07-23 023013](https://github.com/Evafag02/get_friends_vk_api/assets/82770251/30a675ff-55e0-4969-8d6c-8e8926dc1efd)
 ![Снимок экрана 2023-07-23 023028](https://github.com/Evafag02/get_friends_vk_api/assets/82770251/0658f851-ec95-4296-84d0-4730afdf9629)
